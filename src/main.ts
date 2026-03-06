@@ -9,20 +9,29 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors();
 
-  // Global validation pipes
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+  // Global validation pipe
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
-  // Swagger setup
+  // Swagger configuration
   const config = new DocumentBuilder()
-    .setTitle('Material Request API')
-    .setDescription('CRUD API for material requests, materials, and users')
+    .setTitle('Material Request Backend API')
+    .setDescription('CRUD API for Material Requests, Materials, and Users')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(3000);
-  console.log('Application running on http://localhost:3000');
+  console.log('Application is running on http://localhost:3000');
+  console.log('API Documentation: http://localhost:3000/api/docs');
 }
+
 bootstrap();
