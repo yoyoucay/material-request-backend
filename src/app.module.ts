@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Request } from './modules/requests/entities/request.entity';
+import { MaterialRequest } from './modules/requests/entities/request.entity';
 import { MaterialDetail } from './modules/material-details/entities/material-detail.entity';
 import { User } from './modules/users/entities/user.entity';
 import { UserPassword } from './modules/users/entities/user-password.entity';
@@ -20,12 +20,13 @@ import { MaterialsModule } from './modules/materials/materials.module';
       username: 'postgres',
       password: 'Pass1234',
       database: 'material_request_db',
-      entities: [Request, MaterialDetail, User, UserPassword, Material],
-      synchronize: false,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: process.env.NODE_ENV !== 'production',
+      logging: process.env.NODE_ENV !== 'production',
     }),
-    RequestsModule,
     UsersModule,
     MaterialsModule,
+    RequestsModule,
   ],
 })
 export class AppModule {}

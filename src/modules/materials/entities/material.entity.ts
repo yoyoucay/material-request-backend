@@ -1,34 +1,43 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from 'src/modules/users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
-@Entity({ name: 'tumx03' })
+export enum MaterialStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}
+
+@Entity('materials')
 export class Material {
-  @PrimaryGeneratedColumn({ name: 'iMaterialID' })
-    iMaterialID!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ unique: true })
-    sMaterialCode!: string;
+  code: string;
 
   @Column()
-    sMaterialName!: string;
-
-  @Column({ type: 'decimal', default: 0 })
-    decUnitPrice!: number;
+  name: string;
 
   @Column({ nullable: true })
-    sDesc!: string;
-
-  @Column({ default: 1 })
-    iStatus!: number;
+  description: string;
 
   @Column()
-    iCreateBy!: number;
+  unit: string; // pcs, kg, box, etc.
 
-  @Column()
-    dtCreated!: Date;
-
-  @Column({ nullable: true })
-    iUpdatedBy!: number;
+  @Column('decimal', { precision: 10, scale: 2 })
+  price: number;
 
   @Column({ nullable: true })
-    dtUpdated!: Date;
+  category: string;
+
+  @Column({ type: 'enum', enum: MaterialStatus, default: MaterialStatus.ACTIVE })
+  status: MaterialStatus;
+
+  @ManyToOne(() => User)
+  createdBy: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

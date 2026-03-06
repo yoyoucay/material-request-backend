@@ -1,32 +1,52 @@
-import { MaterialDetail } from 'src/modules/material-details/entities/material-detail.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Material } from 'src/modules/materials/entities/material.entity';
+import { User } from 'src/modules/users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
-@Entity({ name: 'tudt01' })
-export class Request {
-  @PrimaryGeneratedColumn({ name: 'iRequestID' })
-  iRequestID: number;
+export enum RequestStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  RECEIVED = 'received',
+}
 
-  @Column()
-  sReqNumber: string;
+@Entity('material_requests')
+export class MaterialRequest {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
-  sDept: string;
+  @Column({ unique: true })
+  requestNumber: string;
 
-  @Column({ default: 1 })
-  iStatus: number;
+  @ManyToOne(() => User)
+  requestedBy: User;
 
-  @Column()
-  iCreateBy: number;
+  @ManyToOne(() => Material)
+  material: Material;
 
-  @Column()
-  dtCreated: Date;
+  @Column('int')
+  quantity: number;
+
+  @Column({ type: 'timestamp' })
+  requestDate: Date;
+
+  @Column({ type: 'timestamp' })
+  requiredDate: Date;
+
+  @Column({ type: 'enum', enum: RequestStatus, default: RequestStatus.PENDING })
+  status: RequestStatus;
 
   @Column({ nullable: true })
-  iUpdatedBy: number;
+  notes: string;
 
-  @Column({ nullable: true })
-  dtUpdated: Date;
+  @ManyToOne(() => User, { nullable: true })
+  approvedBy: User;
 
-  @OneToMany(() => MaterialDetail, (d) => d.request, { cascade: true })
-  details: MaterialDetail[];
+  @Column({ type: 'timestamp', nullable: true })
+  approvalDate: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

@@ -1,34 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'tumx01' })
+export enum UserRole {
+  ADMIN = 'admin',
+  MANAGER = 'manager',
+  USER = 'user',
+}
+
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn({ name: 'iUserID' })
-    iUserID!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ unique: true })
+  email: string;
 
   @Column()
-    sBadgeID!: string;
+  name: string;
 
   @Column()
-    sFullname!: string;
+  password: string;
 
-  @Column()
-    sEmail!: string;
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  role: UserRole;
 
-  @Column()
-    iRole!: number;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ default: 1 })
-    iStatus!: number;
-
-  @Column()
-    iCreateBy!: number;
-
-  @Column()
-    dtCreated!: Date;
-
-  @Column({ nullable: true })
-    iUpdatedBy!: number;
-
-  @Column({ nullable: true })
-    dtUpdated!: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

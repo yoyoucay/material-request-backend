@@ -1,3 +1,4 @@
+import { MaterialRequest } from 'src/modules/requests/entities/request.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,7 +6,6 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Request } from '../../requests/entities/request.entity';
 
 @Entity({ name: 'tudt02' })
 export class MaterialDetail {
@@ -39,7 +39,7 @@ export class MaterialDetail {
   @Column({ nullable: true })
   dtUpdated: Date;
 
-  @ManyToOne(() => Request, (r) => r.details)
+  // @ManyToOne(() => MaterialRequest, (mr) => mr.details)
   @JoinColumn({ name: 'iRequestID' })
-  request: Request;
+  request: MaterialRequest;
 }

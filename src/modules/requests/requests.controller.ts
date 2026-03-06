@@ -1,42 +1,53 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Patch,
-  Delete,
-  Param,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 
-@Controller('requests')
+@ApiTags('Material Requests')
+@Controller('api/requests')
 export class RequestsController {
-  constructor(private readonly service: RequestsService) {}
+  constructor(private readonly requestsService: RequestsService) {}
 
   @Post()
-  create(@Body() dto: CreateRequestDto) {
-    return this.service.create(dto);
+  @ApiOperation({ summary: 'Create a new material request' })
+  create(@Body() createRequestDto: CreateRequestDto) {
+    return this.requestsService.create(createRequestDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get all material requests' })
   findAll() {
-    return this.service.findAll();
+    return this.requestsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.service.findOne(id);
+  @ApiOperation({ summary: 'Get request by ID' })
+  findOne(@Param('id') id: string) {
+    return this.requestsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateRequestDto) {
-    return this.service.update(id, dto);
+  @Put(':id')
+  @ApiOperation({ summary: 'Update request' })
+  update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto) {
+    return this.requestsService.update(id, updateRequestDto);
+  }
+
+  @Put(':id/approve')
+  @ApiOperation({ summary: 'Approve request' })
+  approve(@Param('id') id: string, @Body('approvedById') approvedById: string) {
+    return this.requestsService.approve(id, approvedById);
+  }
+
+  @Put(':id/reject')
+  @ApiOperation({ summary: 'Reject request' })
+  reject(@Param('id') id: string) {
+    return this.requestsService.reject(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.service.remove(id);
+  @ApiOperation({ summary: 'Delete request' })
+  remove(@Param('id') id: string) {
+    return this.requestsService.remove(id);
   }
 }
