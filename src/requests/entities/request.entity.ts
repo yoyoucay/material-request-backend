@@ -30,10 +30,10 @@ export class Request {
   dtCreated: Date;
 
   @Column({ type: 'int', nullable: true })
-  iUpdatedBy: number;
+  iUpdatedBy: number | null;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  dtUpdated: Date;
+  dtUpdated: Date | null;
 
   @OneToMany(() => RequestDetail, (detail) => detail.request, { cascade: true })
   requestDetails: RequestDetail[];

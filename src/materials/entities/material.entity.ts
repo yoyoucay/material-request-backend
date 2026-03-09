@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { EntityStatus } from '../../common/constants/enums';
-import { RequestDetail } from 'src/requests/entities/request-detail.entity';
+import { RequestDetail } from '../../requests/entities/request-detail.entity';
 
 
 @Entity({ name: 'tumx03' })
@@ -37,10 +37,10 @@ export class Material {
   dtCreated: Date;
 
   @Column({ type: 'int', nullable: true })
-  iUpdatedBy: number;
+  iUpdatedBy: number | null;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  dtUpdated: Date;
+  dtUpdated: Date | null;
 
   @OneToMany(() => RequestDetail, (detail) => detail.material)
   requestDetails: RequestDetail[];

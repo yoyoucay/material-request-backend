@@ -31,10 +31,10 @@ export class Password {
   dtCreated: Date;
 
   @Column({ type: 'int', nullable: true })
-  iUpdatedBy: number;
+  iUpdatedBy: number | null;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  dtUpdated: Date;
+  dtUpdated: Date | null;
 
   @ManyToOne(() => User, (user) => user.passwords)
   @JoinColumn({ name: 'iUserID' })

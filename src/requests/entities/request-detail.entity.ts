@@ -38,10 +38,10 @@ export class RequestDetail {
   dtCreated: Date;
 
   @Column({ type: 'int', nullable: true })
-  iUpdatedBy: number;
+  iUpdatedBy: number | null;
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
-  dtUpdated: Date;
+  dtUpdated: Date | null;
 
   @ManyToOne(() => Request, (request) => request.requestDetails, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'iRequestID' })
