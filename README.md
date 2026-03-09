@@ -84,7 +84,36 @@ npm run start:prod
 
 The API will be available at `http://localhost:3000`
 
-Swagger documentation is available at `http://localhost:3000/api` (if configured in your application)
+Swagger API documentation is available at `http://localhost:3000/api/docs`
+
+## Swagger Documentation
+
+The project includes comprehensive Swagger/OpenAPI documentation for all endpoints. Once the application is running:
+
+1. Open your browser and navigate to: `http://localhost:3000/api/docs`
+2. You will see an interactive Swagger UI with:
+   - All API endpoints organized by module (Materials, Users, Material Requests)
+   - Request/response schemas with examples
+   - Try-it-out functionality to test endpoints directly
+   - Parameter documentation and descriptions
+   - Response code information
+
+### Swagger Features
+
+- **Request Models**: All DTOs are documented with example values and descriptions
+- **Response Models**: Entity schemas showing all returned fields
+- **Response Codes**: HTTP status codes (200, 201, 204, 400, 404, 409, etc.)
+- **Try It Out**: Test endpoints directly from the Swagger UI
+- **Authentication**: Bearer token support ready for future authentication implementation
+
+### Endpoint Documentation
+
+All endpoints include:
+- Clear summary and description
+- Required and optional parameters
+- Request body schema with examples
+- Response schemas with status codes
+- Error response descriptions
 
 ## Testing
 

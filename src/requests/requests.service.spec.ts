@@ -26,6 +26,14 @@ describe('RequestsService', () => {
     requestDetails: [],
   };
 
+  const mockMaterial = {
+    iMaterialID: 1,
+    sMaterialCode: 'MAT001',
+    sMaterialName: 'Steel Rod',
+    decUnitPrice: 50.00,
+    iStatus: EntityStatus.ACTIVE,
+  };
+
   const mockRequestDetail: RequestDetail = {
     iDetailID: 1,
     iRequestID: 1,
@@ -38,15 +46,7 @@ describe('RequestsService', () => {
     iUpdatedBy: null,
     dtUpdated: null,
     request: mockRequest,
-    material: null,
-  };
-
-  const mockMaterial = {
-    iMaterialID: 1,
-    sMaterialCode: 'MAT001',
-    sMaterialName: 'Steel Rod',
-    decUnitPrice: 50.00,
-    iStatus: EntityStatus.ACTIVE,
+    material: mockMaterial as any,
   };
 
   beforeEach(async () => {
