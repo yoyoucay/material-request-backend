@@ -19,7 +19,6 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto, iCreateBy: number): Promise<User> {
-    // Check if email already exists
     const existingUser = await this.usersRepository.findOne({
       where: { sEmail: createUserDto.sEmail },
     });
@@ -28,7 +27,6 @@ export class UsersService {
       throw new ConflictException('Email already registered');
     }
 
-    // Check if badge ID already exists
     const existingBadge = await this.usersRepository.findOne({
       where: { sBadgeID: createUserDto.sBadgeID },
     });
@@ -37,7 +35,6 @@ export class UsersService {
       throw new ConflictException('Badge ID already exists');
     }
 
-    // Create user
     const user = this.usersRepository.create({
       sBadgeID: createUserDto.sBadgeID,
       sFullname: createUserDto.sFullname,
@@ -49,7 +46,6 @@ export class UsersService {
 
     const savedUser = await this.usersRepository.save(user);
 
-    // Hash password and create password record
     const hashedPassword = await bcrypt.hash(createUserDto.sPassword, 10);
     const password = this.passwordsRepository.create({
       iUserID: savedUser.iUserID,
@@ -100,9 +96,8 @@ export class UsersService {
     changePasswordDto: ChangePasswordDto,
     iUpdatedBy: number,
   ): Promise<void> {
-    const user = await this.findOne(iUserID);
+    await this.findOne(iUserID);
 
-    // Get current password
     const currentPassword = await this.passwordsRepository.findOne({
       where: { iUserID },
       order: { dtCreated: 'DESC' },
@@ -112,22 +107,18 @@ export class UsersService {
       throw new NotFoundException('Password record not found');
     }
 
-    // Verify old password
     const isPasswordValid = await bcrypt.compare(changePasswordDto.sOldPassword, currentPassword.sPassword);
 
     if (!isPasswordValid) {
       throw new BadRequestException('Old password is incorrect');
     }
 
-    // Check if new password matches confirm password
     if (changePasswordDto.sNewPassword !== changePasswordDto.sConfirmPassword) {
       throw new BadRequestException('New password and confirm password do not match');
     }
 
-    // Hash new password
     const hashedPassword = await bcrypt.hash(changePasswordDto.sNewPassword, 10);
 
-    // Create new password record
     const newPassword = this.passwordsRepository.create({
       iUserID,
       sPassword: hashedPassword,

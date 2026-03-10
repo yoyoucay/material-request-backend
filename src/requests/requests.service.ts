@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from './entities/request.entity';
@@ -20,12 +20,12 @@ export class RequestsService {
   ) {}
 
   async create(createRequestDto: CreateRequestDto, iCreateBy: number): Promise<Request | null> {
-    // Validate all materials exist
-    for (const detail of createRequestDto.requestDetails) {
-      await this.materialsService.findByCode(detail.sMaterialCode);
+    if (createRequestDto.requestDetails?.length) {
+      for (const detail of createRequestDto.requestDetails) {
+        await this.materialsService.findByCode(detail.sMaterialCode);
+      }
     }
 
-    // Create request
     const request = this.requestsRepository.create({
       sReqNumber: createRequestDto.sReqNumber,
       sDept: createRequestDto.sDept,
@@ -35,21 +35,21 @@ export class RequestsService {
 
     const savedRequest = await this.requestsRepository.save(request);
 
-    // Create request details
-    for (const detail of createRequestDto.requestDetails) {
-      const requestDetail = this.requestDetailsRepository.create({
-        iRequestID: savedRequest.iRequestID,
-        sMaterialCode: detail.sMaterialCode,
-        decQty: detail.decQty,
-        sDesc: detail.sDesc,
-        iStatus: EntityStatus.ACTIVE,
-        iCreateBy,
-      });
+    if (createRequestDto.requestDetails?.length) {
+      for (const detail of createRequestDto.requestDetails) {
+        const requestDetail = this.requestDetailsRepository.create({
+          iRequestID: savedRequest.iRequestID,
+          sMaterialCode: detail.sMaterialCode,
+          decQty: detail.decQty,
+          sDesc: detail.sDesc,
+          iStatus: EntityStatus.ACTIVE,
+          iCreateBy,
+        });
 
-      await this.requestDetailsRepository.save(requestDetail);
+        await this.requestDetailsRepository.save(requestDetail);
+      }
     }
 
-    // Load full request with details
     return this.requestsRepository.findOne({
       where: { iRequestID: savedRequest.iRequestID },
       relations: ['requestDetails'],
@@ -89,9 +89,8 @@ export class RequestsService {
     createRequestDetailDto: CreateRequestDetailDto,
     iCreateBy: number,
   ): Promise<RequestDetail> {
-    const request = await this.findOne(iRequestID);
+    await this.findOne(iRequestID);
 
-    // Validate material exists
     await this.materialsService.findByCode(createRequestDetailDto.sMaterialCode);
 
     const requestDetail = this.requestDetailsRepository.create({
@@ -119,7 +118,6 @@ export class RequestsService {
       throw new NotFoundException(`Request detail with ID ${iDetailID} not found`);
     }
 
-    // Validate material exists
     await this.materialsService.findByCode(createRequestDetailDto.sMaterialCode);
 
     Object.assign(requestDetail, createRequestDetailDto, { iUpdatedBy, dtUpdated: new Date() });

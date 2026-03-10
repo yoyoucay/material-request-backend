@@ -14,7 +14,6 @@ export class MaterialsService {
   ) {}
 
   async create(createMaterialDto: CreateMaterialDto, iCreateBy: number): Promise<Material> {
-    // Check if material code already exists
     const existingMaterial = await this.materialsRepository.findOne({
       where: { sMaterialCode: createMaterialDto.sMaterialCode },
     });

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MaterialsModule } from './materials/materials.module';
 import { RequestsModule } from './requests/requests.module';
@@ -9,7 +10,6 @@ import { Password } from './users/entities/password.entity';
 import { Material } from './materials/entities/material.entity';
 import { Request } from './requests/entities/request.entity';
 import { RequestDetail } from './requests/entities/request-detail.entity';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
