@@ -9,6 +9,7 @@ import { Password } from './users/entities/password.entity';
 import { Material } from './materials/entities/material.entity';
 import { Request } from './requests/entities/request.entity';
 import { RequestDetail } from './requests/entities/request-detail.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RequestDetail } from './requests/entities/request-detail.entity';
       synchronize: process.env.NODE_ENV !== 'production',
       logging: process.env.NODE_ENV !== 'production',
     }),
+    AuthModule,
     UsersModule,
     MaterialsModule,
     RequestsModule,
