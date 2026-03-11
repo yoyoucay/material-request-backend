@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TokenBlacklistService {
-  private blacklist: Set<string> = new Set();
+  private readonly blacklist: Set<string> = new Set();
 
   add(token: string): void {
     this.blacklist.add(token);
