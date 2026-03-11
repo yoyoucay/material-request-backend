@@ -43,7 +43,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=password
-DB_NAME=material_request
+DB_NAME=material_request_db
 ```
 
 Update the values according to your PostgreSQL setup.
@@ -51,7 +51,7 @@ Update the values according to your PostgreSQL setup.
 ### 4. Create the database
 
 ```bash
-createdb material_request
+createdb material_request_db
 ```
 
 Or using PostgreSQL CLI:
